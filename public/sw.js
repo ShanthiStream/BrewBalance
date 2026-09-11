@@ -1,8 +1,12 @@
-const CACHE_NAME = 'brewbalance-ai-v3';
+const CACHE_NAME = 'brewbalance-ai-v4';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
+  '/favicon.ico',
+  '/favicon-32x32.png',
+  '/favicon-16x16.png',
+  '/apple-touch-icon.png',
   '/assets/logo.webp',
   '/assets/logo-192.webp',
   '/assets/logo-512.webp',
