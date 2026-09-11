@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { UserLimit } from '../types';
 import { saveLimits, exportDataCSV, exportDataJSON } from '../services/storage';
-import { Sliders, Download, ShieldCheck, Check, Coffee, Heart, Trash2, Database } from 'lucide-react';
+import { Sliders, Download, ShieldCheck, Check, Trash2, Database } from 'lucide-react';
 
 interface SettingsViewProps {
   limits: UserLimit[];
@@ -166,59 +166,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         </div>
       </div>
 
-      {/* Support & Buy Me A Coffee */}
-      <div className="glass-panel" style={{
-        padding: '20px',
-        border: '1px solid rgba(245, 158, 11, 0.3)',
-        background: 'linear-gradient(180deg, rgba(245, 158, 11, 0.06) 0%, rgba(15, 23, 42, 0.7) 100%)'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-          <div style={{
-            width: 32,
-            height: 32,
-            borderRadius: '50%',
-            background: 'rgba(245, 158, 11, 0.2)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#f59e0b'
-          }}>
-            <Coffee size={18} />
-          </div>
-          <div>
-            <h3 style={{ fontSize: '1.15rem', color: '#fcd34d' }}>Fuel the Creator</h3>
-            <span style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>Independent wellness & edge-ML engineering</span>
-          </div>
-        </div>
-
-        <p style={{ fontSize: '0.85rem', color: '#cbd5e1', lineHeight: '1.45', marginBottom: 14 }}>
-          BrewBalance AI is built with zero ads and total client-side privacy. If this app brings balance to your caffeine & hydration habits, consider supporting continuous development.
-        </p>
-
-        <a
-          href="https://buymeacoffee.com/shanthistream"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn"
-          style={{
-            width: '100%',
-            background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-            color: '#000',
-            fontWeight: 800,
-            fontSize: '0.95rem',
-            textDecoration: 'none',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 8,
-            boxShadow: '0 4px 16px rgba(245, 158, 11, 0.35)'
-          }}
-        >
-          <Coffee size={18} />
-          <span>Buy Me a Coffee</span>
-          <Heart size={15} fill="#000" />
-        </a>
-      </div>
 
       {/* Security & Local Mode */}
       <div className="glass-panel" style={{ padding: '20px' }}>

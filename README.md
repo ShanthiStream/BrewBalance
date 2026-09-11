@@ -3,7 +3,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/ShanthiStream/BrewBalance)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/ShanthiStream/BrewBalance)
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Shanthi%20Stream-orange.svg?logo=buy-me-a-coffee)](https://buymeacoffee.com/shanthistream)
 
 > **Intelligent real-time hydration and caffeine optimization engine powered by on-device Edge-ML.**
 
@@ -24,7 +23,6 @@ Modern knowledge workers and athletes frequently struggle with chronic afternoon
 - **📈 Rich Analytics Dashboard**: Time-series trajectory curves, separate cards for Water, Tea, and Coffee, and limit adherence scoring.
 - **📱 Offline-First PWA**: Installable directly on iOS, Android, and Desktop with full offline caching via service worker.
 - **🔒 Zero-Tracking Privacy**: Air-gapped local storage with complete data sovereignty (CSV & JSON exports).
-- **☕ BuyMeACoffee Integration**: Integrated support for [Shanthi Stream](https://buymeacoffee.com/shanthistream).
 
 ---
 
@@ -67,5 +65,3 @@ node test_core.mjs
 
 ## 📄 License
 Licensed under the [MIT License](LICENSE).
-
-Support continuous development: [Buy Me a Coffee](https://buymeacoffee.com/shanthistream) ☕

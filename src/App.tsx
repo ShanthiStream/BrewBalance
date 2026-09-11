@@ -9,7 +9,7 @@ import { SettingsView } from './components/SettingsView';
 import { AiDailyAnalysisCard } from './components/AiDailyAnalysisCard';
 import { Navigation, TabType } from './components/Navigation';
 import { generateDailyAiAnalysis, DailyAiAnalysis } from './services/aiAnalysis';
-import { Coffee, RotateCcw } from 'lucide-react';
+import { RotateCcw } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>('home');
@@ -145,29 +145,6 @@ export const App: React.FC = () => {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <a
-            href="https://buymeacoffee.com/shanthistream"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="glass-pill"
-            style={{
-              textDecoration: 'none',
-              fontSize: '0.75rem',
-              color: '#f59e0b',
-              background: 'rgba(245, 158, 11, 0.12)',
-              border: '1px solid rgba(245, 158, 11, 0.3)',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 5,
-              transition: 'all 0.2s ease'
-            }}
-            title="Fuel the creator on BuyMeACoffee"
-          >
-            <Coffee size={13} />
-            <span>Fuel Creator</span>
-          </a>
-
           <span className="glass-pill" style={{ fontSize: '0.75rem', color: 'var(--color-water)' }}>
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--color-water)', display: 'inline-block' }} />
             Edge ML
