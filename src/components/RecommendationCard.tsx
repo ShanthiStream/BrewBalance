@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles, AlertTriangle, Moon, Droplet, Coffee, CheckCircle2 } from 'lucide-react';
+import { Sparkles, AlertTriangle, Moon, Droplet, Coffee, CheckCircle2, Zap } from 'lucide-react';
 import { Recommendation } from '../types';
 import confetti from 'canvas-confetti';
 
@@ -14,43 +14,79 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
 }) => {
   const { suggestedBeverage, confidenceScore, reasonCode, message, portionMl, currentStats } = recommendation;
 
-  const getArtwork = () => {
+  const getTheme = () => {
     switch (suggestedBeverage) {
-      case 'coffee': return '/assets/coffee.jpg';
-      case 'tea': return '/assets/tea.jpg';
-      default: return '/assets/water.jpg';
+      case 'coffee':
+        return {
+          color: '#f59e0b',
+          deepColor: '#d97706',
+          glow: 'rgba(245, 158, 11, 0.4)',
+          bgGlow: 'rgba(245, 158, 11, 0.15)',
+          artwork: '/assets/coffee.jpg',
+          accentGradient: 'linear-gradient(135deg, #f59e0b, #b45309)',
+          pillBorder: 'rgba(245, 158, 11, 0.35)',
+          name: 'Coffee'
+        };
+      case 'tea':
+        return {
+          color: '#10b981',
+          deepColor: '#059669',
+          glow: 'rgba(16, 185, 129, 0.4)',
+          bgGlow: 'rgba(16, 185, 129, 0.15)',
+          artwork: '/assets/tea.jpg',
+          accentGradient: 'linear-gradient(135deg, #10b981, #047857)',
+          pillBorder: 'rgba(16, 185, 129, 0.35)',
+          name: 'Tea'
+        };
+      default:
+        return {
+          color: '#00d2ff',
+          deepColor: '#0284c7',
+          glow: 'rgba(0, 210, 255, 0.4)',
+          bgGlow: 'rgba(0, 210, 255, 0.15)',
+          artwork: '/assets/water.jpg',
+          accentGradient: 'linear-gradient(135deg, #00d2ff, #0369a1)',
+          pillBorder: 'rgba(0, 210, 255, 0.35)',
+          name: 'Water'
+        };
     }
   };
+
+  const theme = getTheme();
 
   const getBadgeDetails = () => {
     switch (reasonCode) {
       case 'LIMIT_EXCEEDED':
         return {
-          icon: <AlertTriangle size={14} color="#f43f5e" />,
-          label: 'Caffeine Quota Exceeded',
+          icon: <AlertTriangle size={13} color="#f43f5e" />,
+          label: 'Caffeine Cap Reached',
           color: 'var(--color-danger)',
-          bg: 'var(--color-danger-bg)'
+          bg: 'rgba(244, 63, 94, 0.15)',
+          border: 'rgba(244, 63, 94, 0.35)'
         };
       case 'CIRCADIAN_CUTOFF':
         return {
-          icon: <Moon size={14} color="#a855f7" />,
-          label: 'Sleep Rhythm Guard',
+          icon: <Moon size={13} color="#c084fc" />,
+          label: 'Circadian Sleep Guard',
           color: '#c084fc',
-          bg: 'rgba(168, 85, 247, 0.15)'
+          bg: 'rgba(168, 85, 247, 0.15)',
+          border: 'rgba(168, 85, 247, 0.35)'
         };
       case 'DEHYDRATION':
         return {
-          icon: <Droplet size={14} color="#06b6d4" />,
-          label: 'Dehydration Detected',
+          icon: <Droplet size={13} color="#00d2ff" />,
+          label: 'Hydration Recovery',
           color: 'var(--color-water)',
-          bg: 'var(--color-water-bg)'
+          bg: 'var(--color-water-bg)',
+          border: 'rgba(0, 210, 255, 0.35)'
         };
       default:
         return {
-          icon: <Sparkles size={14} color="#10b981" />,
+          icon: <Sparkles size={13} color="#10b981" />,
           label: 'Edge-ML Optimal Window',
           color: 'var(--color-success)',
-          bg: 'var(--color-tea-bg)'
+          bg: 'var(--color-tea-bg)',
+          border: 'rgba(16, 185, 129, 0.35)'
         };
     }
   };
@@ -59,226 +95,333 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
 
   const handleQuickLog = () => {
     confetti({
-      particleCount: 50,
-      spread: 60,
-      origin: { y: 0.75 },
-      colors: suggestedBeverage === 'water' ? ['#06b6d4', '#38bdf8'] : suggestedBeverage === 'tea' ? ['#10b981', '#34d399'] : ['#f59e0b', '#d97706']
+      particleCount: 65,
+      spread: 65,
+      origin: { y: 0.7 },
+      colors: suggestedBeverage === 'water' ? ['#00d2ff', '#38bdf8', '#ffffff'] : suggestedBeverage === 'tea' ? ['#10b981', '#34d399', '#ffffff'] : ['#f59e0b', '#d97706', '#ffffff']
     });
     onQuickLog(suggestedBeverage, portionMl);
   };
 
+  // Ring Gauge Math
   const waterPercent = Math.min(100, Math.round((currentStats.todayWaterMl / currentStats.waterTargetMl) * 100));
   const caffPercent = Math.min(100, Math.round((currentStats.todayCaffeineMg / currentStats.caffeineLimitMg) * 100));
 
+  const radiusOuter = 38;
+  const circumOuter = 2 * Math.PI * radiusOuter;
+  const dashOffsetWater = circumOuter - (waterPercent / 100) * circumOuter;
+
+  const radiusInner = 28;
+  const circumInner = 2 * Math.PI * radiusInner;
+  const dashOffsetCaff = circumInner - (caffPercent / 100) * circumInner;
+
   return (
-    <div className="glass-panel" style={{ overflow: 'hidden', position: 'relative' }}>
-      {/* Visual Header Banner */}
+    <div style={{ position: 'relative' }}>
+      {/* Ambient Luminescence Backdrop */}
       <div style={{
-        position: 'relative',
-        height: '210px',
-        width: '100%',
-        backgroundImage: `url(${getArtwork()})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        borderBottom: '1px solid var(--border-subtle)'
-      }}>
-        {/* Soft Vignette Overlay */}
+        position: 'absolute',
+        inset: '-4px',
+        background: `radial-gradient(ellipse at center, ${theme.bgGlow} 0%, transparent 70%)`,
+        filter: 'blur(35px)',
+        zIndex: 0,
+        pointerEvents: 'none',
+        transition: 'background 0.5s ease'
+      }} />
+
+      {/* Main Luxury Glass Card */}
+      <div
+        className="glass-panel"
+        style={{
+          position: 'relative',
+          zIndex: 1,
+          overflow: 'hidden',
+          border: '1px solid rgba(255, 255, 255, 0.12)',
+          background: 'linear-gradient(180deg, rgba(20, 29, 48, 0.75) 0%, rgba(10, 15, 26, 0.9) 100%)',
+          boxShadow: '0 20px 45px -10px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.08) inset'
+        }}
+      >
+        {/* Specular Top Sheen */}
         <div style={{
           position: 'absolute',
-          inset: 0,
-          background: 'linear-gradient(180deg, rgba(9, 13, 22, 0.2) 0%, rgba(9, 13, 22, 0.85) 85%, #0f172a 100%)'
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '2px',
+          background: `linear-gradient(90deg, transparent 0%, ${theme.color} 50%, transparent 100%)`,
+          opacity: 0.8
         }} />
 
-        {/* Floating Top Badges */}
+        {/* Hero Visual Presentation */}
         <div style={{
-          position: 'absolute',
-          top: 14,
-          left: 16,
-          right: 16,
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center'
+          position: 'relative',
+          height: '220px',
+          width: '100%',
+          backgroundImage: `url(${theme.artwork})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          overflow: 'hidden'
         }}>
+          {/* Multi-Stop Dark Vignette */}
           <div style={{
-            background: badge.bg,
-            color: badge.color,
-            border: `1px solid ${badge.color}40`,
-            borderRadius: 'var(--radius-full)',
-            padding: '5px 12px',
-            fontSize: '0.8rem',
-            fontWeight: 700,
-            display: 'flex',
-            alignItems: 'center',
-            gap: 6,
-            backdropFilter: 'blur(8px)'
-          }}>
-            {badge.icon}
-            <span>{badge.label}</span>
-          </div>
+            position: 'absolute',
+            inset: 0,
+            background: 'linear-gradient(180deg, rgba(6, 9, 17, 0.25) 0%, rgba(10, 15, 26, 0.75) 70%, #0d1424 100%)'
+          }} />
 
+          {/* Top Status Bar Over Artwork */}
           <div style={{
-            background: 'rgba(0, 0, 0, 0.65)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            borderRadius: 'var(--radius-full)',
-            padding: '4px 10px',
-            fontSize: '0.75rem',
-            fontWeight: 600,
-            color: 'var(--text-secondary)',
-            backdropFilter: 'blur(8px)'
-          }}>
-            Sub-5ms Edge ML • {Math.round(confidenceScore * 100)}% conf
-          </div>
-        </div>
-
-        {/* Floating Title & Beverage Label */}
-        <div style={{
-          position: 'absolute',
-          bottom: 12,
-          left: 18,
-          right: 18
-        }}>
-          <span style={{
-            fontSize: '0.8rem',
-            letterSpacing: '0.08em',
-            textTransform: 'uppercase',
-            color: 'var(--text-muted)',
-            fontWeight: 700
-          }}>
-            Real-Time Recommendation
-          </span>
-          <h2 style={{
-            fontSize: '2rem',
-            textTransform: 'capitalize',
+            position: 'absolute',
+            top: 14,
+            left: 16,
+            right: 16,
             display: 'flex',
-            alignItems: 'center',
-            gap: 10,
-            color: suggestedBeverage === 'water' ? 'var(--color-water)' : suggestedBeverage === 'tea' ? 'var(--color-tea)' : 'var(--color-coffee)'
-          }}>
-            {suggestedBeverage}
-            <span style={{ fontSize: '1.1rem', fontWeight: 400, color: 'var(--text-secondary)' }}>
-              ({portionMl}ml)
-            </span>
-          </h2>
-        </div>
-      </div>
-
-      {/* Card Content & Action Area */}
-      <div style={{ padding: '18px 20px', display: 'flex', flexDirection: 'column', gap: 16 }}>
-        <p style={{ fontSize: '0.95rem', lineHeight: '1.45', color: '#cbd5e1' }}>
-          {message}
-        </p>
-
-        {/* Progress Gauges */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: 12,
-          background: 'rgba(255, 255, 255, 0.02)',
-          padding: '12px 14px',
-          borderRadius: 'var(--radius-md)',
-          border: '1px solid var(--border-subtle)'
-        }}>
-          {/* Water Progress */}
-          <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', marginBottom: 6 }}>
-              <span style={{ color: 'var(--color-water)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
-                <Droplet size={12} /> Hydration
-              </span>
-              <span style={{ color: 'var(--text-muted)' }}>{currentStats.todayWaterMl} / {currentStats.waterTargetMl}ml</span>
-            </div>
-            <div style={{ width: '100%', height: 6, background: 'rgba(255, 255, 255, 0.08)', borderRadius: 3, overflow: 'hidden' }}>
-              <div style={{
-                width: `${waterPercent}%`,
-                height: '100%',
-                background: 'linear-gradient(90deg, #06b6d4, #38bdf8)',
-                borderRadius: 3,
-                transition: 'width 0.4s ease'
-              }} />
-            </div>
-          </div>
-
-          {/* Caffeine Progress */}
-          <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', marginBottom: 6 }}>
-              <span style={{ color: currentStats.todayCaffeineMg >= currentStats.caffeineLimitMg ? 'var(--color-danger)' : 'var(--color-coffee)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
-                <Coffee size={12} /> Caffeine
-              </span>
-              <span style={{ color: 'var(--text-muted)' }}>{currentStats.todayCaffeineMg} / {currentStats.caffeineLimitMg}mg</span>
-            </div>
-            <div style={{ width: '100%', height: 6, background: 'rgba(255, 255, 255, 0.08)', borderRadius: 3, overflow: 'hidden' }}>
-              <div style={{
-                width: `${caffPercent}%`,
-                height: '100%',
-                background: currentStats.todayCaffeineMg >= currentStats.caffeineLimitMg 
-                  ? 'linear-gradient(90deg, #f43f5e, #e11d48)' 
-                  : 'linear-gradient(90deg, #f59e0b, #fbbf24)',
-                borderRadius: 3,
-                transition: 'width 0.4s ease'
-              }} />
-            </div>
-          </div>
-        </div>
-
-        {/* Quick Log Action CTA */}
-        <button
-          onClick={handleQuickLog}
-          className="btn"
-          style={{
-            width: '100%',
-            padding: '12px 18px',
-            background: suggestedBeverage === 'water'
-              ? 'linear-gradient(135deg, #06b6d4, #0284c7)'
-              : suggestedBeverage === 'tea'
-              ? 'linear-gradient(135deg, #10b981, #059669)'
-              : 'linear-gradient(135deg, #f59e0b, #d97706)',
-            color: '#fff',
-            fontSize: '1.02rem',
-            fontWeight: 700,
-            boxShadow: 'var(--shadow-md)'
-          }}
-        >
-          <CheckCircle2 size={18} />
-          <span>Log {portionMl}ml {suggestedBeverage.toUpperCase()} Now</span>
-        </button>
-
-        {/* Clever Support Callout on Caffeine Exceed / Cutoff */}
-        {(reasonCode === 'LIMIT_EXCEEDED' || reasonCode === 'CIRCADIAN_CUTOFF') && (
-          <div style={{
-            background: 'rgba(245, 158, 11, 0.08)',
-            border: '1px dashed rgba(245, 158, 11, 0.3)',
-            borderRadius: 'var(--radius-md)',
-            padding: '10px 14px',
-            display: 'flex',
-            alignItems: 'center',
             justifyContent: 'space-between',
-            gap: 10
+            alignItems: 'center'
           }}>
-            <div style={{ fontSize: '0.8rem', color: '#fcd34d' }}>
-              <span>☕ Reached your caffeine ceiling? Transfer the good vibes — </span>
-              <strong>buy the developer a coffee!</strong>
+            <div style={{
+              background: badge.bg,
+              color: badge.color,
+              border: `1px solid ${badge.border}`,
+              borderRadius: 'var(--radius-full)',
+              padding: '6px 14px',
+              fontSize: '0.78rem',
+              fontWeight: 700,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              backdropFilter: 'blur(16px)',
+              boxShadow: '0 4px 14px rgba(0,0,0,0.4)'
+            }}>
+              {badge.icon}
+              <span>{badge.label}</span>
             </div>
-            <a
-              href="https://buymeacoffee.com/shanthistream"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                background: '#f59e0b',
-                color: '#000',
-                padding: '5px 12px',
-                borderRadius: 'var(--radius-full)',
-                textDecoration: 'none',
-                fontWeight: 700,
-                fontSize: '0.74rem',
-                whiteSpace: 'nowrap',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 4
-              }}
-            >
-              Fuel ☕
-            </a>
+
+            <div style={{
+              background: 'rgba(6, 10, 18, 0.75)',
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+              borderRadius: 'var(--radius-full)',
+              padding: '5px 12px',
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              color: '#94a3b8',
+              backdropFilter: 'blur(16px)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6
+            }}>
+              <Zap size={12} color={theme.color} />
+              <span>{Math.round(confidenceScore * 100)}% Confidence</span>
+            </div>
           </div>
-        )}
+
+          {/* Floating Hero Beverage Header */}
+          <div style={{
+            position: 'absolute',
+            bottom: 12,
+            left: 20,
+            right: 20,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-end'
+          }}>
+            <div>
+              <span style={{
+                fontSize: '0.75rem',
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                color: '#94a3b8',
+                fontWeight: 700
+              }}>
+                Current Biological Need
+              </span>
+              <h2 style={{
+                fontSize: '2.4rem',
+                fontWeight: 900,
+                lineHeight: '1.05',
+                color: theme.color,
+                textShadow: `0 0 25px ${theme.glow}`,
+                letterSpacing: '-0.03em',
+                marginTop: 2
+              }}>
+                {theme.name}
+                <span style={{
+                  fontSize: '1.15rem',
+                  fontWeight: 500,
+                  color: 'rgba(255, 255, 255, 0.65)',
+                  marginLeft: 10
+                }}>
+                  {portionMl}ml
+                </span>
+              </h2>
+            </div>
+          </div>
+        </div>
+
+        {/* Content & Apple-Style Concentric Activity Ring */}
+        <div style={{ padding: '20px 22px', display: 'flex', flexDirection: 'column', gap: 18 }}>
+          {/* Main Description */}
+          <p style={{ fontSize: '0.96rem', lineHeight: '1.5', color: '#e2e8f0', fontWeight: 400 }}>
+            {message}
+          </p>
+
+          {/* Activity Gauge & Quick Numbers HUD */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 20,
+            background: 'rgba(255, 255, 255, 0.025)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            padding: '16px 18px',
+            borderRadius: 'var(--radius-lg)',
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.25) inset'
+          }}>
+            {/* Concentric Dual Halo SVG Ring */}
+            <div style={{ position: 'relative', width: 94, height: 94, flexShrink: 0 }}>
+              <svg width="94" height="94" viewBox="0 0 94 94" style={{ transform: 'rotate(-90deg)' }}>
+                {/* Background tracks */}
+                <circle cx="47" cy="47" r={radiusOuter} stroke="rgba(0, 210, 255, 0.15)" strokeWidth="8" fill="none" />
+                <circle cx="47" cy="47" r={radiusInner} stroke="rgba(245, 158, 11, 0.15)" strokeWidth="8" fill="none" />
+
+                {/* Animated Outer Ring (Water) */}
+                <circle
+                  cx="47"
+                  cy="47"
+                  r={radiusOuter}
+                  stroke="#00d2ff"
+                  strokeWidth="8"
+                  fill="none"
+                  strokeDasharray={circumOuter}
+                  strokeDashoffset={dashOffsetWater}
+                  strokeLinecap="round"
+                  style={{ transition: 'stroke-dashoffset 0.6s cubic-bezier(0.16, 1, 0.3, 1)' }}
+                />
+
+                {/* Animated Inner Ring (Caffeine) */}
+                <circle
+                  cx="47"
+                  cy="47"
+                  r={radiusInner}
+                  stroke={currentStats.todayCaffeineMg >= currentStats.caffeineLimitMg ? '#f43f5e' : '#f59e0b'}
+                  strokeWidth="8"
+                  fill="none"
+                  strokeDasharray={circumInner}
+                  strokeDashoffset={dashOffsetCaff}
+                  strokeLinecap="round"
+                  style={{ transition: 'stroke-dashoffset 0.6s cubic-bezier(0.16, 1, 0.3, 1)' }}
+                />
+              </svg>
+
+              {/* Center Ring Icon */}
+              <div style={{
+                position: 'absolute',
+                inset: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: theme.color
+              }}>
+                {suggestedBeverage === 'water' ? <Droplet size={20} /> : <Coffee size={20} />}
+              </div>
+            </div>
+
+            {/* Metrics Breakdown Readout */}
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {/* Hydration Metric */}
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', marginBottom: 4 }}>
+                  <span style={{ color: '#00d2ff', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 5 }}>
+                    <Droplet size={13} /> Hydration
+                  </span>
+                  <span style={{ color: '#f8fafc', fontWeight: 700 }}>
+                    {currentStats.todayWaterMl} <span style={{ color: '#64748b', fontWeight: 500 }}>/ {currentStats.waterTargetMl}ml</span>
+                  </span>
+                </div>
+                <div style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
+                  {waterPercent}% of daily replenishment goal
+                </div>
+              </div>
+
+              {/* Caffeine Metric */}
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', marginBottom: 4 }}>
+                  <span style={{
+                    color: currentStats.todayCaffeineMg >= currentStats.caffeineLimitMg ? '#f43f5e' : '#f59e0b',
+                    fontWeight: 700,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 5
+                  }}>
+                    <Coffee size={13} /> Caffeine
+                  </span>
+                  <span style={{ color: '#f8fafc', fontWeight: 700 }}>
+                    {currentStats.todayCaffeineMg} <span style={{ color: '#64748b', fontWeight: 500 }}>/ {currentStats.caffeineLimitMg}mg</span>
+                  </span>
+                </div>
+                <div style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
+                  {caffPercent}% of maximum stimulant ceiling
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Primary Action Button */}
+          <button
+            onClick={handleQuickLog}
+            className="btn"
+            style={{
+              width: '100%',
+              padding: '14px 22px',
+              background: theme.accentGradient,
+              color: '#ffffff',
+              fontSize: '1.05rem',
+              fontWeight: 800,
+              boxShadow: `0 8px 24px ${theme.glow}, 0 1px 2px rgba(255, 255, 255, 0.4) inset`,
+              border: 'none',
+              borderRadius: 'var(--radius-md)',
+              cursor: 'pointer'
+            }}
+          >
+            <CheckCircle2 size={20} />
+            <span>Log {portionMl}ml {theme.name.toUpperCase()} Now</span>
+          </button>
+
+          {/* Contextual Caffeine Cap Callout */}
+          {(reasonCode === 'LIMIT_EXCEEDED' || reasonCode === 'CIRCADIAN_CUTOFF') && (
+            <div style={{
+              background: 'rgba(245, 158, 11, 0.08)',
+              border: '1px dashed rgba(245, 158, 11, 0.35)',
+              borderRadius: 'var(--radius-md)',
+              padding: '12px 16px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: 12
+            }}>
+              <div style={{ fontSize: '0.82rem', color: '#fcd34d', lineHeight: '1.4' }}>
+                <span>☕ Reached your caffeine ceiling? Transfer the good vibes — </span>
+                <strong>buy the developer a coffee!</strong>
+              </div>
+              <a
+                href="https://buymeacoffee.com/shanthistream"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+                  color: '#000',
+                  padding: '6px 14px',
+                  borderRadius: 'var(--radius-full)',
+                  textDecoration: 'none',
+                  fontWeight: 800,
+                  fontSize: '0.75rem',
+                  whiteSpace: 'nowrap',
+                  boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)'
+                }}
+              >
+                Fuel ☕
+              </a>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

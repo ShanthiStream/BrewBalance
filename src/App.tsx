@@ -9,7 +9,7 @@ import { SettingsView } from './components/SettingsView';
 import { AiDailyAnalysisCard } from './components/AiDailyAnalysisCard';
 import { Navigation, TabType } from './components/Navigation';
 import { generateDailyAiAnalysis, DailyAiAnalysis } from './services/aiAnalysis';
-import { Droplet, Coffee, RotateCcw } from 'lucide-react';
+import { Coffee, RotateCcw } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>('home');
@@ -174,75 +174,149 @@ export const App: React.FC = () => {
             />
 
             {/* Quick 1-Tap Logging Shelf */}
-            <div className="glass-panel" style={{ padding: '16px 18px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            <div className="glass-panel" style={{
+              padding: '18px 20px',
+              border: '1px solid rgba(255, 255, 255, 0.09)',
+              background: 'linear-gradient(180deg, rgba(17, 24, 39, 0.7) 0%, rgba(10, 15, 26, 0.85) 100%)'
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+                <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                   Fast One-Tap Presets
                 </span>
                 <button
                   onClick={() => setIsLoggerOpen(true)}
-                  style={{ background: 'none', border: 'none', color: 'var(--color-water)', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    borderRadius: 'var(--radius-full)',
+                    padding: '4px 12px',
+                    color: '#00d2ff',
+                    fontSize: '0.78rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }}
                 >
                   Custom portion +
                 </button>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
                 {/* Water Fast Button */}
                 <button
                   onClick={() => handleQuickLog('water', 250)}
-                  className="btn"
                   style={{
-                    background: 'var(--color-water-bg)',
-                    border: '1px solid var(--border-glow-cyan)',
-                    color: 'var(--color-water)',
-                    padding: '10px 8px',
+                    background: 'linear-gradient(180deg, rgba(0, 210, 255, 0.08) 0%, rgba(15, 23, 42, 0.8) 100%)',
+                    border: '1px solid rgba(0, 210, 255, 0.3)',
+                    borderRadius: 'var(--radius-md)',
+                    padding: '14px 10px',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: 2
+                    alignItems: 'center',
+                    gap: 6,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                    boxShadow: '0 4px 14px rgba(0, 0, 0, 0.3)',
+                    position: 'relative',
+                    overflow: 'hidden'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-3px)';
+                    e.currentTarget.style.borderColor = 'rgba(0, 210, 255, 0.6)';
+                    e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 210, 255, 0.25)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.borderColor = 'rgba(0, 210, 255, 0.3)';
+                    e.currentTarget.style.boxShadow = '0 4px 14px rgba(0, 0, 0, 0.3)';
                   }}
                 >
-                  <Droplet size={18} />
-                  <span style={{ fontWeight: 700, fontSize: '0.88rem' }}>+250ml Water</span>
-                  <span style={{ fontSize: '0.7rem', opacity: 0.8 }}>Pure Hydration</span>
+                  <img
+                    src="/assets/water.jpg"
+                    alt="Water"
+                    style={{ width: 34, height: 34, borderRadius: '50%', objectFit: 'cover', border: '1.5px solid #00d2ff', boxShadow: '0 0 10px rgba(0, 210, 255, 0.4)' }}
+                  />
+                  <div style={{ fontWeight: 800, fontSize: '0.92rem', color: '#00d2ff' }}>+250ml</div>
+                  <div style={{ fontSize: '0.72rem', color: '#94a3b8', fontWeight: 600 }}>Pure Water</div>
+                  <div style={{ fontSize: '0.66rem', color: '#64748b' }}>0 mg caff</div>
                 </button>
 
                 {/* Tea Fast Button */}
                 <button
                   onClick={() => handleQuickLog('tea', 250)}
-                  className="btn"
                   style={{
-                    background: 'var(--color-tea-bg)',
-                    border: '1px solid var(--border-glow-emerald)',
-                    color: 'var(--color-tea)',
-                    padding: '10px 8px',
+                    background: 'linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, rgba(15, 23, 42, 0.8) 100%)',
+                    border: '1px solid rgba(16, 185, 129, 0.3)',
+                    borderRadius: 'var(--radius-md)',
+                    padding: '14px 10px',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: 2
+                    alignItems: 'center',
+                    gap: 6,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                    boxShadow: '0 4px 14px rgba(0, 0, 0, 0.3)',
+                    position: 'relative',
+                    overflow: 'hidden'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-3px)';
+                    e.currentTarget.style.borderColor = 'rgba(16, 185, 129, 0.6)';
+                    e.currentTarget.style.boxShadow = '0 8px 24px rgba(16, 185, 129, 0.25)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+                    e.currentTarget.style.boxShadow = '0 4px 14px rgba(0, 0, 0, 0.3)';
                   }}
                 >
-                  <Coffee size={18} />
-                  <span style={{ fontWeight: 700, fontSize: '0.88rem' }}>+250ml Tea</span>
-                  <span style={{ fontSize: '0.7rem', opacity: 0.8 }}>45mg Caffeine</span>
+                  <img
+                    src="/assets/tea.jpg"
+                    alt="Tea"
+                    style={{ width: 34, height: 34, borderRadius: '50%', objectFit: 'cover', border: '1.5px solid #10b981', boxShadow: '0 0 10px rgba(16, 185, 129, 0.4)' }}
+                  />
+                  <div style={{ fontWeight: 800, fontSize: '0.92rem', color: '#10b981' }}>+250ml</div>
+                  <div style={{ fontSize: '0.72rem', color: '#94a3b8', fontWeight: 600 }}>Artisan Tea</div>
+                  <div style={{ fontSize: '0.66rem', color: '#64748b' }}>~45 mg caff</div>
                 </button>
 
                 {/* Coffee Fast Button */}
                 <button
                   onClick={() => handleQuickLog('coffee', 250)}
-                  className="btn"
                   style={{
-                    background: 'var(--color-coffee-bg)',
-                    border: '1px solid var(--border-glow-amber)',
-                    color: 'var(--color-coffee)',
-                    padding: '10px 8px',
+                    background: 'linear-gradient(180deg, rgba(245, 158, 11, 0.08) 0%, rgba(15, 23, 42, 0.8) 100%)',
+                    border: '1px solid rgba(245, 158, 11, 0.3)',
+                    borderRadius: 'var(--radius-md)',
+                    padding: '14px 10px',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: 2
+                    alignItems: 'center',
+                    gap: 6,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                    boxShadow: '0 4px 14px rgba(0, 0, 0, 0.3)',
+                    position: 'relative',
+                    overflow: 'hidden'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-3px)';
+                    e.currentTarget.style.borderColor = 'rgba(245, 158, 11, 0.6)';
+                    e.currentTarget.style.boxShadow = '0 8px 24px rgba(245, 158, 11, 0.25)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.borderColor = 'rgba(245, 158, 11, 0.3)';
+                    e.currentTarget.style.boxShadow = '0 4px 14px rgba(0, 0, 0, 0.3)';
                   }}
                 >
-                  <Coffee size={18} />
-                  <span style={{ fontWeight: 700, fontSize: '0.88rem' }}>+250ml Coffee</span>
-                  <span style={{ fontSize: '0.7rem', opacity: 0.8 }}>95mg Caffeine</span>
+                  <img
+                    src="/assets/coffee.jpg"
+                    alt="Coffee"
+                    style={{ width: 34, height: 34, borderRadius: '50%', objectFit: 'cover', border: '1.5px solid #f59e0b', boxShadow: '0 0 10px rgba(245, 158, 11, 0.4)' }}
+                  />
+                  <div style={{ fontWeight: 800, fontSize: '0.92rem', color: '#f59e0b' }}>+250ml</div>
+                  <div style={{ fontSize: '0.72rem', color: '#94a3b8', fontWeight: 600 }}>Espresso Brew</div>
+                  <div style={{ fontSize: '0.66rem', color: '#64748b' }}>~95 mg caff</div>
                 </button>
               </div>
             </div>

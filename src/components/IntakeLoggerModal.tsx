@@ -190,30 +190,40 @@ export const IntakeLoggerModal: React.FC<IntakeLoggerModalProps> = ({
           {activeTab === 'manual' ? (
             <>
               {/* Beverage Type Selection Cards */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
                 {/* Water Card */}
                 <div
                   onClick={() => setBeverageType('water')}
                   style={{
                     cursor: 'pointer',
-                    borderRadius: 'var(--radius-md)',
+                    borderRadius: 'var(--radius-lg)',
                     border: beverageType === 'water' ? '2px solid var(--color-water)' : '1px solid var(--border-subtle)',
-                    background: beverageType === 'water' ? 'var(--color-water-bg)' : 'rgba(255, 255, 255, 0.02)',
-                    padding: '12px 8px',
+                    background: beverageType === 'water' ? 'linear-gradient(180deg, rgba(0, 210, 255, 0.16) 0%, rgba(15, 23, 42, 0.9) 100%)' : 'rgba(255, 255, 255, 0.03)',
+                    padding: '14px 8px',
                     textAlign: 'center',
-                    transition: 'all 0.2s ease',
-                    boxShadow: beverageType === 'water' ? 'var(--color-water-glow)' : 'none'
+                    transition: 'all var(--transition-bounce)',
+                    boxShadow: beverageType === 'water' ? '0 8px 24px rgba(0, 210, 255, 0.35)' : 'none',
+                    transform: beverageType === 'water' ? 'scale(1.02)' : 'scale(1)'
                   }}
                 >
-                  <img
-                    src="/assets/water.jpg"
-                    alt="Water"
-                    style={{ width: '44px', height: '44px', borderRadius: '50%', objectFit: 'cover', margin: '0 auto 8px' }}
-                  />
-                  <div style={{ fontWeight: 700, fontSize: '0.9rem', color: beverageType === 'water' ? 'var(--color-water)' : 'var(--text-primary)' }}>
+                  <div style={{ position: 'relative', width: 48, height: 48, margin: '0 auto 8px' }}>
+                    <img
+                      src="/assets/water.jpg"
+                      alt="Water"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: '50%',
+                        objectFit: 'cover',
+                        border: beverageType === 'water' ? '2px solid var(--color-water)' : '1px solid var(--border-subtle)',
+                        boxShadow: beverageType === 'water' ? '0 0 14px rgba(0, 210, 255, 0.5)' : 'none'
+                      }}
+                    />
+                  </div>
+                  <div style={{ fontWeight: 800, fontSize: '0.95rem', color: beverageType === 'water' ? 'var(--color-water)' : 'var(--text-primary)' }}>
                     Water
                   </div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>0 mg caff</div>
+                  <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 2 }}>0 mg caff</div>
                 </div>
 
                 {/* Tea Card */}
@@ -221,24 +231,34 @@ export const IntakeLoggerModal: React.FC<IntakeLoggerModalProps> = ({
                   onClick={() => setBeverageType('tea')}
                   style={{
                     cursor: 'pointer',
-                    borderRadius: 'var(--radius-md)',
+                    borderRadius: 'var(--radius-lg)',
                     border: beverageType === 'tea' ? '2px solid var(--color-tea)' : '1px solid var(--border-subtle)',
-                    background: beverageType === 'tea' ? 'var(--color-tea-bg)' : 'rgba(255, 255, 255, 0.02)',
-                    padding: '12px 8px',
+                    background: beverageType === 'tea' ? 'linear-gradient(180deg, rgba(16, 185, 129, 0.16) 0%, rgba(15, 23, 42, 0.9) 100%)' : 'rgba(255, 255, 255, 0.03)',
+                    padding: '14px 8px',
                     textAlign: 'center',
-                    transition: 'all 0.2s ease',
-                    boxShadow: beverageType === 'tea' ? 'var(--color-tea-glow)' : 'none'
+                    transition: 'all var(--transition-bounce)',
+                    boxShadow: beverageType === 'tea' ? '0 8px 24px rgba(16, 185, 129, 0.35)' : 'none',
+                    transform: beverageType === 'tea' ? 'scale(1.02)' : 'scale(1)'
                   }}
                 >
-                  <img
-                    src="/assets/tea.jpg"
-                    alt="Tea"
-                    style={{ width: '44px', height: '44px', borderRadius: '50%', objectFit: 'cover', margin: '0 auto 8px' }}
-                  />
-                  <div style={{ fontWeight: 700, fontSize: '0.9rem', color: beverageType === 'tea' ? 'var(--color-tea)' : 'var(--text-primary)' }}>
+                  <div style={{ position: 'relative', width: 48, height: 48, margin: '0 auto 8px' }}>
+                    <img
+                      src="/assets/tea.jpg"
+                      alt="Tea"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: '50%',
+                        objectFit: 'cover',
+                        border: beverageType === 'tea' ? '2px solid var(--color-tea)' : '1px solid var(--border-subtle)',
+                        boxShadow: beverageType === 'tea' ? '0 0 14px rgba(16, 185, 129, 0.5)' : 'none'
+                      }}
+                    />
+                  </div>
+                  <div style={{ fontWeight: 800, fontSize: '0.95rem', color: beverageType === 'tea' ? 'var(--color-tea)' : 'var(--text-primary)' }}>
                     Tea
                   </div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>~45 mg caff</div>
+                  <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 2 }}>~45 mg caff</div>
                 </div>
 
                 {/* Coffee Card */}
@@ -246,24 +266,34 @@ export const IntakeLoggerModal: React.FC<IntakeLoggerModalProps> = ({
                   onClick={() => setBeverageType('coffee')}
                   style={{
                     cursor: 'pointer',
-                    borderRadius: 'var(--radius-md)',
+                    borderRadius: 'var(--radius-lg)',
                     border: beverageType === 'coffee' ? '2px solid var(--color-coffee)' : '1px solid var(--border-subtle)',
-                    background: beverageType === 'coffee' ? 'var(--color-coffee-bg)' : 'rgba(255, 255, 255, 0.02)',
-                    padding: '12px 8px',
+                    background: beverageType === 'coffee' ? 'linear-gradient(180deg, rgba(245, 158, 11, 0.16) 0%, rgba(15, 23, 42, 0.9) 100%)' : 'rgba(255, 255, 255, 0.03)',
+                    padding: '14px 8px',
                     textAlign: 'center',
-                    transition: 'all 0.2s ease',
-                    boxShadow: beverageType === 'coffee' ? 'var(--color-coffee-glow)' : 'none'
+                    transition: 'all var(--transition-bounce)',
+                    boxShadow: beverageType === 'coffee' ? '0 8px 24px rgba(245, 158, 11, 0.35)' : 'none',
+                    transform: beverageType === 'coffee' ? 'scale(1.02)' : 'scale(1)'
                   }}
                 >
-                  <img
-                    src="/assets/coffee.jpg"
-                    alt="Coffee"
-                    style={{ width: '44px', height: '44px', borderRadius: '50%', objectFit: 'cover', margin: '0 auto 8px' }}
-                  />
-                  <div style={{ fontWeight: 700, fontSize: '0.9rem', color: beverageType === 'coffee' ? 'var(--color-coffee)' : 'var(--text-primary)' }}>
+                  <div style={{ position: 'relative', width: 48, height: 48, margin: '0 auto 8px' }}>
+                    <img
+                      src="/assets/coffee.jpg"
+                      alt="Coffee"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: '50%',
+                        objectFit: 'cover',
+                        border: beverageType === 'coffee' ? '2px solid var(--color-coffee)' : '1px solid var(--border-subtle)',
+                        boxShadow: beverageType === 'coffee' ? '0 0 14px rgba(245, 158, 11, 0.5)' : 'none'
+                      }}
+                    />
+                  </div>
+                  <div style={{ fontWeight: 800, fontSize: '0.95rem', color: beverageType === 'coffee' ? 'var(--color-coffee)' : 'var(--text-primary)' }}>
                     Coffee
                   </div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>~95 mg caff</div>
+                  <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 2 }}>~95 mg caff</div>
                 </div>
               </div>
 
