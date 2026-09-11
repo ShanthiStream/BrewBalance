@@ -192,7 +192,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         </div>
 
         <p style={{ fontSize: '0.85rem', color: '#cbd5e1', lineHeight: '1.45', marginBottom: 14 }}>
-          BrewBalance AI is built with zero ads and total client-side privacy. If this app brings balance to your caffeine & hydration habits, consider supporting continuous development on <strong>Shanthi Stream</strong>.
+          BrewBalance AI is built with zero ads and total client-side privacy. If this app brings balance to your caffeine & hydration habits, consider supporting continuous development.
         </p>
 
         <a
@@ -215,7 +215,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           }}
         >
           <Coffee size={18} />
-          <span>Buy Me a Coffee (shanthistream)</span>
+          <span>Buy Me a Coffee</span>
           <Heart size={15} fill="#000" />
         </a>
       </div>
