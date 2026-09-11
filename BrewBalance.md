@@ -1,14 +1,14 @@
-# BrewBalance
+# BrewBalance AI
 
 ### 1️⃣ Title & Badges
-- **App Name**: BrewBalance
+- **App Name**: BrewBalance AI
 - **Tagline**: Intelligent real-time hydration and caffeine optimization engine powered by Edge-ML.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/example/brewbalance)
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/example/brewbalance/actions)
-[![Coverage](https://img.shields.io/badge/coverage-94%25-green.svg)](https://github.com/example/brewbalance)
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Shanthi%20Stream-orange.svg?logo=buy-me-a-coffee)](https://buymeacoffee.com/shanthistream)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/ShanthiStream/BrewBalance)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/ShanthiStream/BrewBalance)
+[![Coverage](https://img.shields.io/badge/coverage-94%25-green.svg)](https://github.com/ShanthiStream/BrewBalance)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-orange.svg?logo=buy-me-a-coffee)](https://buymeacoffee.com/shanthistream)
 
 ---
 
@@ -479,10 +479,13 @@ in the Software without restriction...
 ```
 
 #### Contributing Guidelines
-1. Fork repository (`https://github.com/example/brewbalance`).
+1. Fork repository (`https://github.com/ShanthiStream/BrewBalance`).
 2. Create topic branch: `git checkout -b feature/smart-rehydration-algo`.
-3. Validate tests and style: `npm test` or `pytest && flutter test`.
+3. Validate tests and style: `npm test` or `npm run build`.
 4. Submit Pull Request with detailed acceptance criteria and test evidence.
+
+#### Support the Project
+Support continuous development: [Buy Me a Coffee](https://buymeacoffee.com/shanthistream) ☕
 
 ---
 
