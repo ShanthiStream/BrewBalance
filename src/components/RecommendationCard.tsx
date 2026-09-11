@@ -1,5 +1,5 @@
-import React from 'react';
-import { Sparkles, AlertTriangle, Moon, Droplet, Coffee, CheckCircle2, Zap } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Sparkles, AlertTriangle, Moon, Droplet, Coffee, CheckCircle2, Zap, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Recommendation } from '../types';
 import confetti from 'canvas-confetti';
 
@@ -8,51 +8,104 @@ interface RecommendationCardProps {
   onQuickLog: (beverage: 'water' | 'tea' | 'coffee', volume: number) => void;
 }
 
+interface BeverageSlide {
+  beverage: 'water' | 'tea' | 'coffee';
+  name: string;
+  subtitle: string;
+  icon: string;
+  artwork: string;
+  color: string;
+  deepColor: string;
+  glow: string;
+  bgGlow: string;
+  accentGradient: string;
+  defaultMl: number;
+}
+
+const BEVERAGE_SLIDES: BeverageSlide[] = [
+  {
+    beverage: 'water',
+    name: 'Water',
+    subtitle: 'Pure Hydration',
+    icon: '💧',
+    artwork: '/assets/water.jpg',
+    color: '#00d2ff',
+    deepColor: '#0284c7',
+    glow: 'rgba(0, 210, 255, 0.45)',
+    bgGlow: 'rgba(0, 210, 255, 0.18)',
+    accentGradient: 'linear-gradient(135deg, #00d2ff, #0369a1)',
+    defaultMl: 300
+  },
+  {
+    beverage: 'tea',
+    name: 'Tea',
+    subtitle: 'Mindful L-Theanine',
+    icon: '🍵',
+    artwork: '/assets/tea.jpg',
+    color: '#10b981',
+    deepColor: '#059669',
+    glow: 'rgba(16, 185, 129, 0.45)',
+    bgGlow: 'rgba(16, 185, 129, 0.18)',
+    accentGradient: 'linear-gradient(135deg, #10b981, #047857)',
+    defaultMl: 250
+  },
+  {
+    beverage: 'coffee',
+    name: 'Coffee',
+    subtitle: 'Focused Energy',
+    icon: '☕',
+    artwork: '/assets/coffee.jpg',
+    color: '#f59e0b',
+    deepColor: '#d97706',
+    glow: 'rgba(245, 158, 11, 0.45)',
+    bgGlow: 'rgba(245, 158, 11, 0.18)',
+    accentGradient: 'linear-gradient(135deg, #f59e0b, #b45309)',
+    defaultMl: 200
+  }
+];
+
 export const RecommendationCard: React.FC<RecommendationCardProps> = ({
   recommendation,
   onQuickLog
 }) => {
   const { suggestedBeverage, confidenceScore, reasonCode, message, portionMl, currentStats } = recommendation;
 
-  const getTheme = () => {
-    switch (suggestedBeverage) {
-      case 'coffee':
-        return {
-          color: '#f59e0b',
-          deepColor: '#d97706',
-          glow: 'rgba(245, 158, 11, 0.4)',
-          bgGlow: 'rgba(245, 158, 11, 0.15)',
-          artwork: '/assets/coffee.jpg',
-          accentGradient: 'linear-gradient(135deg, #f59e0b, #b45309)',
-          pillBorder: 'rgba(245, 158, 11, 0.35)',
-          name: 'Coffee'
-        };
-      case 'tea':
-        return {
-          color: '#10b981',
-          deepColor: '#059669',
-          glow: 'rgba(16, 185, 129, 0.4)',
-          bgGlow: 'rgba(16, 185, 129, 0.15)',
-          artwork: '/assets/tea.jpg',
-          accentGradient: 'linear-gradient(135deg, #10b981, #047857)',
-          pillBorder: 'rgba(16, 185, 129, 0.35)',
-          name: 'Tea'
-        };
-      default:
-        return {
-          color: '#00d2ff',
-          deepColor: '#0284c7',
-          glow: 'rgba(0, 210, 255, 0.4)',
-          bgGlow: 'rgba(0, 210, 255, 0.15)',
-          artwork: '/assets/water.jpg',
-          accentGradient: 'linear-gradient(135deg, #00d2ff, #0369a1)',
-          pillBorder: 'rgba(0, 210, 255, 0.35)',
-          name: 'Water'
-        };
+  // Sync initial slide index with AI recommendation
+  const initialIndex = BEVERAGE_SLIDES.findIndex(s => s.beverage === suggestedBeverage);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(initialIndex >= 0 ? initialIndex : 0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  // When AI suggestion changes, align slide unless user paused
+  useEffect(() => {
+    const idx = BEVERAGE_SLIDES.findIndex(s => s.beverage === suggestedBeverage);
+    if (idx >= 0) {
+      setCurrentSlideIndex(idx);
     }
+  }, [suggestedBeverage]);
+
+  // Slideshow auto-advance timer (5 seconds)
+  useEffect(() => {
+    if (isPaused) return;
+
+    const timer = setInterval(() => {
+      setCurrentSlideIndex(prev => (prev + 1) % BEVERAGE_SLIDES.length);
+    }, 5000);
+
+    return () => clearInterval(timer);
+  }, [isPaused]);
+
+  const currentSlide = BEVERAGE_SLIDES[currentSlideIndex];
+  const isAiPick = currentSlide.beverage === suggestedBeverage;
+
+  const handlePrev = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentSlideIndex(prev => (prev - 1 + BEVERAGE_SLIDES.length) % BEVERAGE_SLIDES.length);
   };
 
-  const theme = getTheme();
+  const handleNext = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentSlideIndex(prev => (prev + 1) % BEVERAGE_SLIDES.length);
+  };
 
   const getBadgeDetails = () => {
     switch (reasonCode) {
@@ -94,13 +147,18 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
   const badge = getBadgeDetails();
 
   const handleQuickLog = () => {
+    const logPortion = isAiPick ? portionMl : currentSlide.defaultMl;
     confetti({
       particleCount: 65,
       spread: 65,
       origin: { y: 0.7 },
-      colors: suggestedBeverage === 'water' ? ['#00d2ff', '#38bdf8', '#ffffff'] : suggestedBeverage === 'tea' ? ['#10b981', '#34d399', '#ffffff'] : ['#f59e0b', '#d97706', '#ffffff']
+      colors: currentSlide.beverage === 'water'
+        ? ['#00d2ff', '#38bdf8', '#ffffff']
+        : currentSlide.beverage === 'tea'
+        ? ['#10b981', '#34d399', '#ffffff']
+        : ['#f59e0b', '#d97706', '#ffffff']
     });
-    onQuickLog(suggestedBeverage, portionMl);
+    onQuickLog(currentSlide.beverage, logPortion);
   };
 
   // Ring Gauge Math
@@ -117,15 +175,15 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
 
   return (
     <div style={{ position: 'relative' }}>
-      {/* Ambient Luminescence Backdrop */}
+      {/* Dynamic Ambient Luminescence Backdrop */}
       <div style={{
         position: 'absolute',
-        inset: '-4px',
-        background: `radial-gradient(ellipse at center, ${theme.bgGlow} 0%, transparent 70%)`,
+        inset: '-6px',
+        background: `radial-gradient(ellipse at center, ${currentSlide.bgGlow} 0%, transparent 70%)`,
         filter: 'blur(35px)',
         zIndex: 0,
         pointerEvents: 'none',
-        transition: 'background 0.5s ease'
+        transition: 'background 0.8s cubic-bezier(0.16, 1, 0.3, 1)'
       }} />
 
       {/* Main Luxury Glass Card */}
@@ -147,25 +205,52 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
           left: 0,
           right: 0,
           height: '2px',
-          background: `linear-gradient(90deg, transparent 0%, ${theme.color} 50%, transparent 100%)`,
-          opacity: 0.8
+          background: `linear-gradient(90deg, transparent 0%, ${currentSlide.color} 50%, transparent 100%)`,
+          opacity: 0.9,
+          transition: 'background 0.8s ease'
         }} />
 
-        {/* Hero Visual Presentation */}
-        <div style={{
-          position: 'relative',
-          height: '220px',
-          width: '100%',
-          backgroundImage: `url(${theme.artwork})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          overflow: 'hidden'
-        }}>
-          {/* Multi-Stop Dark Vignette */}
+        {/* Hero Visual Slideshow Presentation */}
+        <div
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          style={{
+            position: 'relative',
+            height: '240px',
+            width: '100%',
+            overflow: 'hidden',
+            cursor: 'default'
+          }}
+        >
+          {/* Stacked Cross-Fade Slides with Ken-Burns Motion */}
+          {BEVERAGE_SLIDES.map((slide, idx) => {
+            const isActive = idx === currentSlideIndex;
+            return (
+              <div
+                key={slide.beverage}
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  backgroundImage: `url(${slide.artwork})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  opacity: isActive ? 1 : 0,
+                  transform: isActive ? 'scale(1.06)' : 'scale(1)',
+                  transition: 'opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1), transform 6s cubic-bezier(0.1, 0.8, 0.2, 1)',
+                  zIndex: isActive ? 1 : 0,
+                  pointerEvents: 'none'
+                }}
+              />
+            );
+          })}
+
+          {/* Multi-Stop Dark Cinematic Vignette */}
           <div style={{
             position: 'absolute',
             inset: 0,
-            background: 'linear-gradient(180deg, rgba(6, 9, 17, 0.25) 0%, rgba(10, 15, 26, 0.75) 70%, #0d1424 100%)'
+            background: 'linear-gradient(180deg, rgba(6, 9, 17, 0.35) 0%, rgba(10, 15, 26, 0.65) 60%, #0d1424 100%)',
+            zIndex: 2,
+            pointerEvents: 'none'
           }} />
 
           {/* Top Status Bar Over Artwork */}
@@ -176,15 +261,16 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
             right: 16,
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'center'
+            alignItems: 'center',
+            zIndex: 3
           }}>
             <div style={{
               background: badge.bg,
               color: badge.color,
               border: `1px solid ${badge.border}`,
               borderRadius: 'var(--radius-full)',
-              padding: '6px 14px',
-              fontSize: '0.78rem',
+              padding: '5px 12px',
+              fontSize: '0.75rem',
               fontWeight: 700,
               display: 'flex',
               alignItems: 'center',
@@ -196,23 +282,113 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
               <span>{badge.label}</span>
             </div>
 
+            {/* Slide Quick Selectors */}
             <div style={{
-              background: 'rgba(6, 10, 18, 0.75)',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              borderRadius: 'var(--radius-full)',
-              padding: '5px 12px',
-              fontSize: '0.75rem',
-              fontWeight: 600,
-              color: '#94a3b8',
-              backdropFilter: 'blur(16px)',
               display: 'flex',
-              alignItems: 'center',
-              gap: 6
+              gap: 5,
+              background: 'rgba(6, 10, 18, 0.72)',
+              padding: '3px 5px',
+              borderRadius: 'var(--radius-full)',
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+              backdropFilter: 'blur(16px)'
             }}>
-              <Zap size={12} color={theme.color} />
-              <span>{Math.round(confidenceScore * 100)}% Confidence</span>
+              {BEVERAGE_SLIDES.map((s, idx) => {
+                const isSelected = idx === currentSlideIndex;
+                const isSug = s.beverage === suggestedBeverage;
+                return (
+                  <button
+                    key={s.beverage}
+                    onClick={() => setCurrentSlideIndex(idx)}
+                    title={`View ${s.name}${isSug ? ' (AI Suggested)' : ''}`}
+                    style={{
+                      background: isSelected ? `${s.color}30` : 'transparent',
+                      border: isSelected ? `1px solid ${s.color}` : '1px solid transparent',
+                      color: isSelected ? '#ffffff' : '#94a3b8',
+                      borderRadius: 'var(--radius-full)',
+                      padding: '3px 8px',
+                      fontSize: '0.72rem',
+                      fontWeight: isSelected ? 700 : 500,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 3,
+                      transition: 'all 0.25s ease'
+                    }}
+                  >
+                    <span>{s.icon}</span>
+                    <span style={{ fontSize: '0.7rem' }}>{s.name}</span>
+                    {isSug && (
+                      <span style={{
+                        fontSize: '0.55rem',
+                        fontWeight: 800,
+                        letterSpacing: '0.04em',
+                        background: 'rgba(255,255,255,0.22)',
+                        padding: '1px 3px',
+                        borderRadius: 3
+                      }}>
+                        AI
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
             </div>
           </div>
+
+          {/* Floating Left / Right Slide Navigation Buttons */}
+          <button
+            onClick={handlePrev}
+            aria-label="Previous beverage slide"
+            style={{
+              position: 'absolute',
+              left: 10,
+              top: '50%',
+              transform: 'translateY(-50%)',
+              zIndex: 3,
+              width: 32,
+              height: 32,
+              borderRadius: 'var(--radius-full)',
+              background: 'rgba(6, 10, 18, 0.65)',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              color: '#ffffff',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              backdropFilter: 'blur(12px)',
+              transition: 'all 0.2s ease',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.5)'
+            }}
+          >
+            <ChevronLeft size={16} />
+          </button>
+
+          <button
+            onClick={handleNext}
+            aria-label="Next beverage slide"
+            style={{
+              position: 'absolute',
+              right: 10,
+              top: '50%',
+              transform: 'translateY(-50%)',
+              zIndex: 3,
+              width: 32,
+              height: 32,
+              borderRadius: 'var(--radius-full)',
+              background: 'rgba(6, 10, 18, 0.65)',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              color: '#ffffff',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              backdropFilter: 'blur(12px)',
+              transition: 'all 0.2s ease',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.5)'
+            }}
+          >
+            <ChevronRight size={16} />
+          </button>
 
           {/* Floating Hero Beverage Header */}
           <div style={{
@@ -222,37 +398,73 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
             right: 20,
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'flex-end'
+            alignItems: 'flex-end',
+            zIndex: 3
           }}>
             <div>
-              <span style={{
-                fontSize: '0.75rem',
-                letterSpacing: '0.12em',
-                textTransform: 'uppercase',
-                color: '#94a3b8',
-                fontWeight: 700
-              }}>
-                Current Biological Need
-              </span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{
+                  fontSize: '0.72rem',
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                  color: isAiPick ? currentSlide.color : '#94a3b8',
+                  fontWeight: 700
+                }}>
+                  {isAiPick ? '★ AI Biological Recommendation' : `${currentSlide.subtitle}`}
+                </span>
+                {isAiPick && (
+                  <span style={{
+                    fontSize: '0.68rem',
+                    color: '#94a3b8',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 3,
+                    background: 'rgba(6, 10, 18, 0.6)',
+                    padding: '2px 8px',
+                    borderRadius: 'var(--radius-full)'
+                  }}>
+                    <Zap size={11} color={currentSlide.color} />
+                    {Math.round(confidenceScore * 100)}% Match
+                  </span>
+                )}
+              </div>
               <h2 style={{
                 fontSize: '2.4rem',
                 fontWeight: 900,
                 lineHeight: '1.05',
-                color: theme.color,
-                textShadow: `0 0 25px ${theme.glow}`,
+                color: currentSlide.color,
+                textShadow: `0 0 25px ${currentSlide.glow}`,
                 letterSpacing: '-0.03em',
-                marginTop: 2
+                marginTop: 3
               }}>
-                {theme.name}
+                {currentSlide.name}
                 <span style={{
                   fontSize: '1.15rem',
                   fontWeight: 500,
                   color: 'rgba(255, 255, 255, 0.65)',
                   marginLeft: 10
                 }}>
-                  {portionMl}ml
+                  {isAiPick ? `${portionMl}ml` : `${currentSlide.defaultMl}ml`}
                 </span>
               </h2>
+            </div>
+
+            {/* Slide Position Indicator Dots */}
+            <div style={{ display: 'flex', gap: 6, marginBottom: 6 }}>
+              {BEVERAGE_SLIDES.map((_, dotIdx) => (
+                <div
+                  key={dotIdx}
+                  onClick={() => setCurrentSlideIndex(dotIdx)}
+                  style={{
+                    width: dotIdx === currentSlideIndex ? 22 : 6,
+                    height: 6,
+                    borderRadius: 'var(--radius-full)',
+                    background: dotIdx === currentSlideIndex ? currentSlide.color : 'rgba(255, 255, 255, 0.25)',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+                  }}
+                />
+              ))}
             </div>
           </div>
         </div>
@@ -261,7 +473,9 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
         <div style={{ padding: '20px 22px', display: 'flex', flexDirection: 'column', gap: 18 }}>
           {/* Main Description */}
           <p style={{ fontSize: '0.96rem', lineHeight: '1.5', color: '#e2e8f0', fontWeight: 400 }}>
-            {message}
+            {isAiPick
+              ? message
+              : `Previewing ${currentSlide.name}: ${currentSlide.subtitle}. Click below to log ${currentSlide.defaultMl}ml, or tap the AI tag above to return to your personalized recommendation.`}
           </p>
 
           {/* Activity Gauge & Quick Numbers HUD */}
@@ -318,9 +532,10 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: theme.color
+                color: currentSlide.color,
+                transition: 'color 0.5s ease'
               }}>
-                {suggestedBeverage === 'water' ? <Droplet size={20} /> : <Coffee size={20} />}
+                {currentSlide.beverage === 'water' ? <Droplet size={20} /> : <Coffee size={20} />}
               </div>
             </div>
 
@@ -371,21 +586,26 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
             style={{
               width: '100%',
               padding: '14px 22px',
-              background: theme.accentGradient,
+              background: currentSlide.accentGradient,
               color: '#ffffff',
               fontSize: '1.05rem',
               fontWeight: 800,
-              boxShadow: `0 8px 24px ${theme.glow}, 0 1px 2px rgba(255, 255, 255, 0.4) inset`,
+              boxShadow: `0 8px 24px ${currentSlide.glow}, 0 1px 2px rgba(255, 255, 255, 0.4) inset`,
               border: 'none',
               borderRadius: 'var(--radius-md)',
-              cursor: 'pointer'
+              cursor: 'pointer',
+              transition: 'background 0.5s ease, box-shadow 0.5s ease'
             }}
           >
             <CheckCircle2 size={20} />
-            <span>Log {portionMl}ml {theme.name.toUpperCase()} Now</span>
+            <span>
+              Log {isAiPick ? portionMl : currentSlide.defaultMl}ml {currentSlide.name.toUpperCase()} Now
+              {isAiPick ? ' (AI Pick)' : ''}
+            </span>
           </button>
         </div>
       </div>
     </div>
   );
 };
+
