@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import { UserLimit } from '../types';
 import { saveLimits, exportDataCSV, exportDataJSON } from '../services/storage';
-import { Sliders, Download, RotateCcw, ShieldCheck, Check, Coffee, Heart } from 'lucide-react';
+import { Sliders, Download, ShieldCheck, Check, Coffee, Heart, Trash2, Database } from 'lucide-react';
 
 interface SettingsViewProps {
   limits: UserLimit[];
   onLimitsUpdated: () => void;
   onDataReset: () => void;
+  onLoadSampleData?: () => void;
 }
 
 export const SettingsView: React.FC<SettingsViewProps> = ({
   limits,
   onLimitsUpdated,
-  onDataReset
+  onDataReset,
+  onLoadSampleData
 }) => {
   const caffLimit = limits.find(l => l.metric === 'max_caffeine_daily')?.thresholdValue || 300;
   const waterTarget = limits.find(l => l.metric === 'min_water_daily')?.thresholdValue || 2500;
@@ -44,7 +46,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `brewbalance_export_${new Date().toISOString().split('T')[0]}.csv`;
+    a.download = `brewbalance_ai_export_${new Date().toISOString().split('T')[0]}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -55,7 +57,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `brewbalance_export_${new Date().toISOString().split('T')[0]}.json`;
+    a.download = `brewbalance_ai_export_${new Date().toISOString().split('T')[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -190,7 +192,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         </div>
 
         <p style={{ fontSize: '0.85rem', color: '#cbd5e1', lineHeight: '1.45', marginBottom: 14 }}>
-          BrewBalance is built with zero ads and total client-side privacy. If this app brings balance to your caffeine & hydration habits, consider supporting continuous development on <strong>Shanthi Stream</strong>.
+          BrewBalance AI is built with zero ads and total client-side privacy. If this app brings balance to your caffeine & hydration habits, consider supporting continuous development on <strong>Shanthi Stream</strong>.
         </p>
 
         <a
@@ -222,13 +224,13 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       <div className="glass-panel" style={{ padding: '20px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
           <ShieldCheck size={20} color="var(--color-water)" />
-          <h3 style={{ fontSize: '1.2rem' }}>Privacy & Security</h3>
+          <h3 style={{ fontSize: '1.2rem' }}>Privacy & Data Management</h3>
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0' }}>
           <div>
             <div style={{ fontWeight: 600, fontSize: '0.9rem' }}>Air-Gapped Local-Only Mode</div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>All Edge-ML inference runs on device</div>
+            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>All Edge-ML inference runs on-device</div>
           </div>
           <input
             type="checkbox"
@@ -238,20 +240,35 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           />
         </div>
 
-        <button
-          onClick={onDataReset}
-          className="btn"
-          style={{
-            marginTop: 14,
-            width: '100%',
-            background: 'rgba(244, 63, 94, 0.1)',
-            color: 'var(--color-danger)',
-            border: '1px solid rgba(244, 63, 94, 0.25)',
-            fontSize: '0.85rem'
-          }}
-        >
-          <RotateCcw size={14} /> Reset to Initial Sample Data
-        </button>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 14 }}>
+          <button
+            onClick={onDataReset}
+            className="btn"
+            style={{
+              width: '100%',
+              background: 'rgba(244, 63, 94, 0.1)',
+              color: 'var(--color-danger)',
+              border: '1px solid rgba(244, 63, 94, 0.25)',
+              fontSize: '0.85rem'
+            }}
+          >
+            <Trash2 size={14} /> Clear All Intake History (Fresh 0ml Start)
+          </button>
+
+          {onLoadSampleData && (
+            <button
+              onClick={onLoadSampleData}
+              className="btn btn-secondary"
+              style={{
+                width: '100%',
+                fontSize: '0.82rem',
+                color: 'var(--text-secondary)'
+              }}
+            >
+              <Database size={14} /> Load 7-Day Demo Data (Preview Charts)
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

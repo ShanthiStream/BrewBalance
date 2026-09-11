@@ -1,4 +1,4 @@
-const CACHE_NAME = 'brewbalance-v1';
+const CACHE_NAME = 'brewbalance-ai-v2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',

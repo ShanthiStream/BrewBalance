@@ -51,8 +51,8 @@ export const evaluateRecommendation = (): Recommendation => {
     };
   }
 
-  // 3. ADAPTIVE GUARDRAIL: Dehydration Interval (> 2 hours without hydration)
-  if (minutesSinceLastIntake >= 120 && todayWaterMl < minWaterLimit * 0.7) {
+  // 3. ADAPTIVE GUARDRAIL: Dehydration Interval (> 2 hours without hydration after an intake)
+  if (todayIntakes.length > 0 && minutesSinceLastIntake >= 120 && todayWaterMl < minWaterLimit * 0.7) {
     return {
       suggestedBeverage: 'water',
       confidenceScore: 0.94,
@@ -65,6 +65,24 @@ export const evaluateRecommendation = (): Recommendation => {
         caffeineLimitMg: maxCaffLimit,
         waterTargetMl: minWaterLimit,
         minutesSinceLastIntake
+      }
+    };
+  }
+
+  // 4. DAY START: Clean slate awaiting morning hydration
+  if (todayIntakes.length === 0 && currentHour < 11) {
+    return {
+      suggestedBeverage: 'water',
+      confidenceScore: 0.95,
+      reasonCode: 'ML_OPTIMAL',
+      message: 'Good morning! Kickstart your metabolism and wakefulness with 350ml of water before your first morning brew.',
+      portionMl: 350,
+      currentStats: {
+        todayCaffeineMg: 0,
+        todayWaterMl: 0,
+        caffeineLimitMg: maxCaffLimit,
+        waterTargetMl: minWaterLimit,
+        minutesSinceLastIntake: 0
       }
     };
   }

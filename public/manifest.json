@@ -1,6 +1,6 @@
 {
-  "name": "BrewBalance",
-  "short_name": "BrewBalance",
+  "name": "BrewBalance AI",
+  "short_name": "BrewBalance AI",
   "description": "Real-time hydration and caffeine optimization engine powered by Edge-ML",
   "start_url": "/",
   "display": "standalone",

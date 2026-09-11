@@ -1,4 +1,4 @@
-# 🍵 BrewBalance: Tea, Coffee & Water Companion
+# 🍵 BrewBalance AI: Tea, Coffee & Water Companion
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/ShanthiStream/BrewBalance)
@@ -11,7 +11,7 @@
 
 ## 🌟 Overview
 
-Modern knowledge workers and athletes frequently struggle with chronic afternoon dehydration and sleep disruption caused by unmanaged caffeine intake. **BrewBalance** continuously analyzes fluid intake, calculates active caffeine decay, respects personalized circadian cut-offs, and runs a lightweight on-device neural network to recommend whether to drink **Tea**, **Coffee**, or **Water**.
+Modern knowledge workers and athletes frequently struggle with chronic afternoon dehydration and sleep disruption caused by unmanaged caffeine intake. **BrewBalance AI** continuously analyzes fluid intake, calculates active caffeine decay, respects personalized circadian cut-offs, and runs a lightweight on-device neural network to recommend whether to drink **Tea**, **Coffee**, or **Water**.
 
 ---
 

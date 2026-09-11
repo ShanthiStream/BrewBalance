@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Intake, UserLimit, Recommendation, BeverageType, IntakeSource } from './types';
-import { getIntakes, addIntake, removeIntake, getLimits } from './services/storage';
+import { getIntakes, addIntake, removeIntake, getLimits, clearAllIntakes, loadSampleData } from './services/storage';
 import { evaluateRecommendation } from './services/edgeMl';
 import { RecommendationCard } from './components/RecommendationCard';
 import { IntakeLoggerModal } from './components/IntakeLoggerModal';
@@ -93,11 +93,23 @@ export const App: React.FC = () => {
     refreshData();
   };
 
-  // Reset data to seed
+  // Reset all data to clean fresh state
   const handleResetData = () => {
+    localStorage.removeItem('brewbalance_ai_intakes_v2');
     localStorage.removeItem('brewbalance_intakes_v1');
     localStorage.removeItem('brewbalance_limits_v1');
+    localStorage.removeItem('brewbalance_ai_limits_v2');
+    clearAllIntakes();
     refreshData();
+    setToastMessage('Intake history reset to clean 0ml start.');
+    setTimeout(() => setToastMessage(null), 3500);
+  };
+
+  const handleLoadSampleData = () => {
+    loadSampleData();
+    refreshData();
+    setToastMessage('7-day demo data loaded for chart preview.');
+    setTimeout(() => setToastMessage(null), 3500);
   };
 
   return (
@@ -112,19 +124,19 @@ export const App: React.FC = () => {
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <img
             src="/assets/logo.jpg"
-            alt="BrewBalance Logo"
+            alt="BrewBalance AI Logo"
             style={{
               width: 44,
               height: 44,
               borderRadius: 'var(--radius-md)',
               objectFit: 'cover',
-              border: '1px solid var(--border-active)',
+              border: '1px solid var(--border-glow-cyan)',
               boxShadow: '0 4px 16px rgba(6, 182, 212, 0.25)'
             }}
           />
           <div>
-            <h1 style={{ fontSize: '1.45rem', lineHeight: '1.1', background: 'linear-gradient(135deg, #f8fafc, #94a3b8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-              BrewBalance
+            <h1 style={{ fontSize: '1.45rem', lineHeight: '1.1', background: 'linear-gradient(135deg, #f8fafc, #94a3b8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', display: 'flex', alignItems: 'center', gap: 6 }}>
+              BrewBalance <span style={{ fontSize: '0.74rem', padding: '2px 7px', borderRadius: 'var(--radius-full)', background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.25), rgba(59, 130, 246, 0.25))', border: '1px solid var(--border-glow-cyan)', color: 'var(--color-water)', fontWeight: 800, letterSpacing: '0.05em' }}>AI</span>
             </h1>
             <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
               Intelligent Hydration & Caffeine Engine
@@ -392,6 +404,7 @@ export const App: React.FC = () => {
             limits={limits}
             onLimitsUpdated={refreshData}
             onDataReset={handleResetData}
+            onLoadSampleData={handleLoadSampleData}
           />
         )}
       </main>

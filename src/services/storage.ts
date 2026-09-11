@@ -1,7 +1,7 @@
 import { Intake, UserLimit, DashboardStats, DashboardRange, TimeSeriesPoint } from '../types';
 
-const INTAKES_KEY = 'brewbalance_intakes_v1';
-const LIMITS_KEY = 'brewbalance_limits_v1';
+const INTAKES_KEY = 'brewbalance_ai_intakes_v2';
+const LIMITS_KEY = 'brewbalance_ai_limits_v2';
 const USER_ID = 'u_default_user';
 
 export const DEFAULT_LIMITS: UserLimit[] = [
@@ -31,8 +31,17 @@ export const DEFAULT_LIMITS: UserLimit[] = [
   }
 ];
 
-// Initial realistic intake history seed so charts and trends are instantly functional
-const generateSeedIntakes = (): Intake[] => {
+// Clean legacy cache keys if present
+try {
+  if (localStorage.getItem('brewbalance_intakes_v1')) {
+    localStorage.removeItem('brewbalance_intakes_v1');
+  }
+} catch {
+  // Ignore in SSR/non-browser
+}
+
+// Optional realistic sample intake history generator for users who want to preview charts
+export const generateSeedIntakes = (): Intake[] => {
   const seed: Intake[] = [];
   const now = new Date();
 
@@ -108,9 +117,8 @@ export const getIntakes = (): Intake[] => {
   try {
     const raw = localStorage.getItem(INTAKES_KEY);
     if (!raw) {
-      const seed = generateSeedIntakes();
-      saveIntakes(seed);
-      return seed;
+      // First launch starts completely clean with 0 consumption
+      return [];
     }
     return JSON.parse(raw);
   } catch (err) {
@@ -125,6 +133,16 @@ export const saveIntakes = (intakes: Intake[]): void => {
   } catch (err) {
     console.error('Failed to save intakes to localStorage:', err);
   }
+};
+
+export const loadSampleData = (): Intake[] => {
+  const seed = generateSeedIntakes();
+  saveIntakes(seed);
+  return seed;
+};
+
+export const clearAllIntakes = (): void => {
+  saveIntakes([]);
 };
 
 export const addIntake = (intake: Omit<Intake, 'id' | 'userId'>): Intake => {
@@ -206,7 +224,7 @@ export const getTodayStats = () => {
   const cutoffHour = limits.find(l => l.metric === 'caffeine_cutoff_hour')?.thresholdValue || 16;
 
   // Minutes since last intake
-  let minutesSinceLastIntake = 999;
+  let minutesSinceLastIntake = todayIntakes.length > 0 ? 999 : 0;
   let lastIntakeTime: string | null = null;
   let lastCaffeineTime: string | null = null;
 
