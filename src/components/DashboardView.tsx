@@ -110,8 +110,12 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ intakes, onDeleteI
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <img
-                src="/assets/water.jpg"
+                src="/assets/water-thumb.webp"
                 alt="Water"
+                width={36}
+                height={36}
+                loading="lazy"
+                decoding="async"
                 style={{
                   width: 36,
                   height: 36,
@@ -176,8 +180,12 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ intakes, onDeleteI
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <img
-                src="/assets/tea.jpg"
+                src="/assets/tea-thumb.webp"
                 alt="Tea"
+                width={36}
+                height={36}
+                loading="lazy"
+                decoding="async"
                 style={{
                   width: 36,
                   height: 36,
@@ -242,8 +250,12 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ intakes, onDeleteI
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <img
-                src="/assets/coffee.jpg"
+                src="/assets/coffee-thumb.webp"
                 alt="Coffee"
+                width={36}
+                height={36}
+                loading="lazy"
+                decoding="async"
                 style={{
                   width: 36,
                   height: 36,

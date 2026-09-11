@@ -1,12 +1,17 @@
-const CACHE_NAME = 'brewbalance-ai-v2';
+const CACHE_NAME = 'brewbalance-ai-v3';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/assets/logo.jpg',
-  '/assets/water.jpg',
-  '/assets/tea.jpg',
-  '/assets/coffee.jpg'
+  '/assets/logo.webp',
+  '/assets/logo-192.webp',
+  '/assets/logo-512.webp',
+  '/assets/water.webp',
+  '/assets/tea.webp',
+  '/assets/coffee.webp',
+  '/assets/water-thumb.webp',
+  '/assets/tea-thumb.webp',
+  '/assets/coffee-thumb.webp'
 ];
 
 self.addEventListener('install', (event) => {

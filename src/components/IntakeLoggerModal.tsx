@@ -208,8 +208,12 @@ export const IntakeLoggerModal: React.FC<IntakeLoggerModalProps> = ({
                 >
                   <div style={{ position: 'relative', width: 48, height: 48, margin: '0 auto 8px' }}>
                     <img
-                      src="/assets/water.jpg"
+                      src="/assets/water-thumb.webp"
                       alt="Water"
+                      width={48}
+                      height={48}
+                      loading="lazy"
+                      decoding="async"
                       style={{
                         width: '100%',
                         height: '100%',
@@ -243,8 +247,12 @@ export const IntakeLoggerModal: React.FC<IntakeLoggerModalProps> = ({
                 >
                   <div style={{ position: 'relative', width: 48, height: 48, margin: '0 auto 8px' }}>
                     <img
-                      src="/assets/tea.jpg"
+                      src="/assets/tea-thumb.webp"
                       alt="Tea"
+                      width={48}
+                      height={48}
+                      loading="lazy"
+                      decoding="async"
                       style={{
                         width: '100%',
                         height: '100%',
@@ -278,8 +286,12 @@ export const IntakeLoggerModal: React.FC<IntakeLoggerModalProps> = ({
                 >
                   <div style={{ position: 'relative', width: 48, height: 48, margin: '0 auto 8px' }}>
                     <img
-                      src="/assets/coffee.jpg"
+                      src="/assets/coffee-thumb.webp"
                       alt="Coffee"
+                      width={48}
+                      height={48}
+                      loading="lazy"
+                      decoding="async"
                       style={{
                         width: '100%',
                         height: '100%',

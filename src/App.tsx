@@ -123,8 +123,12 @@ export const App: React.FC = () => {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <img
-            src="/assets/logo.jpg"
+            src="/assets/logo.webp"
             alt="BrewBalance AI Logo"
+            width={44}
+            height={44}
+            loading="eager"
+            decoding="async"
             style={{
               width: 44,
               height: 44,
@@ -221,8 +225,12 @@ export const App: React.FC = () => {
                   }}
                 >
                   <img
-                    src="/assets/water.jpg"
+                    src="/assets/water-thumb.webp"
                     alt="Water"
+                    width={34}
+                    height={34}
+                    loading="lazy"
+                    decoding="async"
                     style={{ width: 34, height: 34, borderRadius: '50%', objectFit: 'cover', border: '1.5px solid #00d2ff', boxShadow: '0 0 10px rgba(0, 210, 255, 0.4)' }}
                   />
                   <div style={{ fontWeight: 800, fontSize: '0.92rem', color: '#00d2ff' }}>+250ml</div>
@@ -260,8 +268,12 @@ export const App: React.FC = () => {
                   }}
                 >
                   <img
-                    src="/assets/tea.jpg"
+                    src="/assets/tea-thumb.webp"
                     alt="Tea"
+                    width={34}
+                    height={34}
+                    loading="lazy"
+                    decoding="async"
                     style={{ width: 34, height: 34, borderRadius: '50%', objectFit: 'cover', border: '1.5px solid #10b981', boxShadow: '0 0 10px rgba(16, 185, 129, 0.4)' }}
                   />
                   <div style={{ fontWeight: 800, fontSize: '0.92rem', color: '#10b981' }}>+250ml</div>
@@ -299,8 +311,12 @@ export const App: React.FC = () => {
                   }}
                 >
                   <img
-                    src="/assets/coffee.jpg"
+                    src="/assets/coffee-thumb.webp"
                     alt="Coffee"
+                    width={34}
+                    height={34}
+                    loading="lazy"
+                    decoding="async"
                     style={{ width: 34, height: 34, borderRadius: '50%', objectFit: 'cover', border: '1.5px solid #f59e0b', boxShadow: '0 0 10px rgba(245, 158, 11, 0.4)' }}
                   />
                   <div style={{ fontWeight: 800, fontSize: '0.92rem', color: '#f59e0b' }}>+250ml</div>
