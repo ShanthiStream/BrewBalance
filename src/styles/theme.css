@@ -1,0 +1,63 @@
+:root {
+  /* Core Color Tokens */
+  --bg-primary: #090d16;
+  --bg-secondary: #0f172a;
+  --bg-surface: rgba(30, 41, 59, 0.65);
+  --bg-surface-elevated: rgba(30, 41, 59, 0.85);
+  --bg-card: rgba(15, 23, 42, 0.75);
+  --bg-glass: rgba(255, 255, 255, 0.04);
+  --bg-glass-hover: rgba(255, 255, 255, 0.08);
+
+  /* Borders & Glows */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-active: rgba(255, 255, 255, 0.18);
+  --border-glow-cyan: rgba(6, 182, 212, 0.35);
+  --border-glow-emerald: rgba(16, 185, 129, 0.35);
+  --border-glow-amber: rgba(245, 158, 11, 0.35);
+
+  /* Beverage Theming */
+  --color-water: #06b6d4;
+  --color-water-glow: 0 0 20px rgba(6, 182, 212, 0.3);
+  --color-water-bg: rgba(6, 182, 212, 0.12);
+
+  --color-tea: #10b981;
+  --color-tea-glow: 0 0 20px rgba(16, 185, 129, 0.3);
+  --color-tea-bg: rgba(16, 185, 129, 0.12);
+
+  --color-coffee: #f59e0b;
+  --color-coffee-glow: 0 0 20px rgba(245, 158, 11, 0.3);
+  --color-coffee-bg: rgba(245, 158, 11, 0.12);
+
+  --color-danger: #f43f5e;
+  --color-danger-bg: rgba(244, 63, 94, 0.15);
+  --color-success: #10b981;
+  --color-warning: #fbbf24;
+
+  /* Typography Colors */
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-highlight: #38bdf8;
+
+  /* Typography Fonts */
+  --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-full: 9999px;
+
+  /* Shadows & Glassmorphism */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 16px 36px rgba(0, 0, 0, 0.6);
+  --glass-blur: blur(16px);
+  --glass-blur-heavy: blur(28px);
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
