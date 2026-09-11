@@ -2,6 +2,7 @@ import React from 'react';
 import { Sparkles, AlertTriangle, Moon, Droplet, Coffee, CheckCircle2, Zap } from 'lucide-react';
 import { Recommendation } from '../types';
 import confetti from 'canvas-confetti';
+import { generateCreatorCoffeeMessage } from '../services/aiAnalysis';
 
 interface RecommendationCardProps {
   recommendation: Recommendation;
@@ -13,6 +14,7 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
   onQuickLog
 }) => {
   const { suggestedBeverage, confidenceScore, reasonCode, message, portionMl, currentStats } = recommendation;
+  const creatorCallout = generateCreatorCoffeeMessage();
 
   const getTheme = () => {
     switch (suggestedBeverage) {
@@ -385,42 +387,59 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
             <span>Log {portionMl}ml {theme.name.toUpperCase()} Now</span>
           </button>
 
-          {/* Contextual Caffeine Cap Callout */}
-          {(reasonCode === 'LIMIT_EXCEEDED' || reasonCode === 'CIRCADIAN_CUTOFF') && (
-            <div style={{
-              background: 'rgba(245, 158, 11, 0.08)',
-              border: '1px dashed rgba(245, 158, 11, 0.35)',
-              borderRadius: 'var(--radius-md)',
-              padding: '12px 16px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: 12
-            }}>
-              <div style={{ fontSize: '0.82rem', color: '#fcd34d', lineHeight: '1.4' }}>
-                <span>☕ Reached your caffeine ceiling? Transfer the good vibes — </span>
-                <strong>buy the developer a coffee!</strong>
+          {/* Contextual AI-Generated Dynamic Creator Support Callout */}
+          <div style={{
+            background: creatorCallout.accentBg,
+            border: `1px solid ${creatorCallout.accentBorder}`,
+            borderRadius: 'var(--radius-md)',
+            padding: '12px 14px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 12,
+            transition: 'all var(--transition-smooth)'
+          }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+              <div style={{
+                fontSize: '0.7rem',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.04em',
+                color: creatorCallout.accentColor,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 5
+              }}>
+                <Sparkles size={11} />
+                <span>{creatorCallout.badge}</span>
               </div>
-              <a
-                href="https://buymeacoffee.com/shanthistream"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-                  color: '#000',
-                  padding: '6px 14px',
-                  borderRadius: 'var(--radius-full)',
-                  textDecoration: 'none',
-                  fontWeight: 800,
-                  fontSize: '0.75rem',
-                  whiteSpace: 'nowrap',
-                  boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)'
-                }}
-              >
-                Fuel ☕
-              </a>
+              <div style={{ fontSize: '0.8rem', color: '#e2e8f0', lineHeight: '1.4' }}>
+                {creatorCallout.message}
+              </div>
             </div>
-          )}
+            <a
+              href="https://buymeacoffee.com/shanthistream"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+                color: '#000',
+                padding: '7px 14px',
+                borderRadius: 'var(--radius-full)',
+                textDecoration: 'none',
+                fontWeight: 800,
+                fontSize: '0.74rem',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 4px 14px rgba(245, 158, 11, 0.35)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 5,
+                flexShrink: 0
+              }}
+            >
+              <span>{creatorCallout.actionText}</span>
+            </a>
+          </div>
         </div>
       </div>
     </div>
