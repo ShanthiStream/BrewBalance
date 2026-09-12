@@ -10,6 +10,7 @@ import { AiDailyAnalysisCard } from './components/AiDailyAnalysisCard';
 import { Navigation, TabType } from './components/Navigation';
 import { generateDailyAiAnalysis, DailyAiAnalysis } from './services/aiAnalysis';
 import { RotateCcw } from 'lucide-react';
+import { Analytics } from '@vercel/analytics/next';
 
 export const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>('home');
@@ -458,6 +459,9 @@ export const App: React.FC = () => {
         onSelectTab={setActiveTab}
         onOpenLogModal={() => setIsLoggerOpen(true)}
       />
+
+      {/* Vercel Web Analytics */}
+      <Analytics />
     </div>
   );
 };
